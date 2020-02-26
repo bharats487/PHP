@@ -16,7 +16,7 @@
         "slim/php-view": "^2.0",
         "monolog/monolog": "@stable",
         "psr/container": "@stable",
-        "n3xu5/commander": "@stable"
+	"n3xu5/commander": "@stable"
     },
     "require-dev": {
         "phpunit/phpunit": "@stable",
@@ -28,6 +28,7 @@
         }
     },
     "config": {
-        "process-timeout" : 0
+        "process-timeout" : 0,
+        "disable-tls": true
     }
 }

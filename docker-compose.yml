@@ -10,13 +10,15 @@ services:
             - ./public:/var/www/public
             - ./docker/nginx/site.conf:/etc/nginx/conf.d/default.conf
         depends_on:
-            - db
+            - php 
         networks:
             - code-network
     php:
-        image: php-frame:latest 
+        image: php-project:latest 
         volumes:
             - ./public:/var/www/public
+        depends_on:
+            - db      
         networks:
             - code-network
     db:
@@ -25,9 +27,28 @@ services:
        restart: always
        environment:
          MYSQL_ROOT_PASSWORD: root
+       ports:  
+            - "3307:3306" 
        networks:
             - code-network
-     
+    composer: 
+             container_name: composer
+             image: composer:1.6.5
+             volumes:
+                 - /home/edureka/php-project:/app
+             command: ["composer", "update"]
+             command: ["composer", "install"]
+             networks:
+                   - code-network 
+    php-testing:
+               container_name: php-testing
+               image: phpunit/phpunit:6.5.3
+               volumes:
+                   - ./tests/unit:/app
+               command: ["phpunit -c tests/unit/phpunit.xml tests/unit"]
+               networks:
+                     - code-network
+            
 networks:
     code-network:
         driver: bridge
